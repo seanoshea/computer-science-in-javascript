@@ -23,7 +23,7 @@ YAHOO.test.BinarySearchTree = (function(){
     // Base Test Suite
     //-------------------------------------------------------------------------
     
-    var suite = new YAHOO.tool.TestSuite("Doubly Linked List Tests");
+    var suite = new YAHOO.tool.TestSuite("BinarySearchTree Tests");
     
     //-------------------------------------------------------------------------
     // Test Case for adding
@@ -223,6 +223,96 @@ YAHOO.test.BinarySearchTree = (function(){
 
                 
     }));    
+
+    //-------------------------------------------------------------------------
+    // Test Case for BST traversal
+    //-------------------------------------------------------------------------
+    
+    suite.add(new YAHOO.tool.TestCase({
+    
+        name : "traversal testing",
+
+        setUp: function(){
+            this.tree = new BinarySearchTree();
+            this.tree.add(12);
+            this.tree.add(44);
+            this.tree.add(9);
+            this.tree.add(98);
+            this.tree.add(42);
+            this.tree.add(75);
+            this.tree.add(15);
+            this.tree.add(88);
+        },
+        
+        tearDown: function(){
+            delete this.tree;
+        },
+
+        //---------------------------------------------------------------------
+        // Tests
+        //---------------------------------------------------------------------
+
+        testInOrderTraversal: function() {
+            var arr = [];
+            this.tree.traverse(function(node) {
+                arr.push(node.value);
+            });
+            YAHOO.util.ArrayAssert.itemsAreEqual([9, 12, 15, 42, 44, 75, 88, 98], arr);
+        },
+
+        testPostOrderTraversal: function() {
+            var arr = [];
+            this.tree.traverse(function(node) {
+                arr.push(node.value);
+            }, 'postOrder');
+            YAHOO.util.ArrayAssert.itemsAreEqual([9, 15, 42, 88, 75, 98, 44, 12], arr);
+        },
+
+        testPreOrderTraversal: function() {
+            var arr = [];
+            this.tree.traverse(function(node) {
+                arr.push(node.value);
+            }, 'preOrder');
+            YAHOO.util.ArrayAssert.itemsAreEqual([12, 9, 44, 42, 15, 98, 75, 88], arr);
+        }
+    }));
+
+    //-------------------------------------------------------------------------
+    // Test Case for min/max methods
+    //-------------------------------------------------------------------------
+    
+    suite.add(new YAHOO.tool.TestCase({
+    
+        name : "min/max testing",
+
+        setUp: function(){
+            this.tree = new BinarySearchTree();
+            this.tree.add(12);
+            this.tree.add(44);
+            this.tree.add(9);
+            this.tree.add(98);
+            this.tree.add(42);
+            this.tree.add(75);
+            this.tree.add(15);
+            this.tree.add(88);
+        },
+        
+        tearDown: function(){
+            delete this.tree;
+        },
+
+        //---------------------------------------------------------------------
+        // Tests
+        //---------------------------------------------------------------------
+
+        testMinValue: function() {
+            assert.areEqual(9, this.tree.minValue(), "Tree should have a minimum value of 9");
+        },
+
+        testMaxValue: function() {
+            assert.areEqual(98, this.tree.maxValue(), "Tree should have a maximum value of 98");
+        }
+    }));
 
     //return it
     return suite;

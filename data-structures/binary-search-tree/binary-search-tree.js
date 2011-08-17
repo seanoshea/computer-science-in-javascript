@@ -21,6 +21,51 @@
  * THE SOFTWARE.
  */
 
+var preOrder = function(node, process) {
+    if (node) {
+        // first process the node
+        process.call(this, node);
+        // first left ...
+        if (node.left !== null) {
+            preOrder(node.left, process);
+        }
+        // then right ...
+        if (node.right !== null) {
+            preOrder(node.right, process);
+        }
+    }
+},
+postOrder = function(node, process) {
+    if (node) {
+        // first left ...
+        if (node.left !== null) {
+            postOrder(node.left, process);
+        }
+        // then right ...
+        if (node.right !== null) {
+            postOrder(node.right, process);
+        }
+        // finally process the node
+        process.call(this, node);
+    }
+},
+inOrder = function(node, process) {
+    if (node) {
+        //traverse the left subtree
+        if (node.left !== null) {
+            inOrder(node.left, process);
+        }
+        
+        //call the process method on this node
+        process.call(this, node);
+        
+        //traverse the right subtree
+        if (node.right !== null) {
+            inOrder(node.right, process);
+        }
+    }
+};
+
 /**
  * A binary search tree implementation in JavaScript. This implementation
  * does not allow duplicate values to be inserted into the tree, ensuring
@@ -340,31 +385,60 @@ BinarySearchTree.prototype = {
      * Traverses the tree and runs the given method on each node it comes
      * across while doing an in-order traversal.
      * @param {Function} process The function to run on each node.
+     * @param {String} traversalMethod Identifier for the traversal method to use.
+     * This parameter is optional - defaults to an inOrder traversal. Other options
+     * include preOrder and postOrder.
      * @return {void}
      * @method traverse
      */
-    traverse: function(process){
-        
-        //helper function
-        function inOrder(node){
-            if (node){
-                
-                //traverse the left subtree
-                if (node.left !== null){
-                    inOrder(node.left);
-                }            
-                
-                //call the process method on this node
-                process.call(this, node);
-            
-                //traverse the right subtree
-                if (node.right !== null){
-                    inOrder(node.right);
-                }
-            }        
+    traverse: function(process, traversalMethod) {
+        traversalMethod = traversalMethod || 'inOrder';
+        // normalize input to avoid uppercase/lowercase mixups
+        switch (traversalMethod.toLowerCase()) {
+            case 'inorder':
+                inOrder(this._root, process);
+                break;
+            case 'preorder':
+                preOrder(this._root, process);
+                break;
+            case 'postorder':
+                postOrder(this._root, process);
+                break;
+            default:
+                throw new Error('traversalMethod parameter should be either ommitted or one of inOrder, preOrder or postOrder');
+                break;
         }
-        
-        //start with the root
-        inOrder(this._root);    
+    },
+
+    /**
+     * Gets the smallest value in the BST
+     * @return {int} the smallest value in the BST
+     * @method minValue
+     */
+    minValue: function() {
+        var current = this._root;
+        if (!current) {
+            return -1;
+        }
+        while (current.left) {
+            current = current.left;
+        }
+        return current.value;
+    },
+
+    /**
+     * Gets the biggest value in the BST
+     * @return {int} the biggest value in the BST
+     * @method maxValue
+     */
+    maxValue: function() {
+        var current = this._root;
+        if (!current) {
+            return -1;
+        }
+        while (current.right) {
+            current = current.right;
+        }
+        return current.value;
     }
 };
