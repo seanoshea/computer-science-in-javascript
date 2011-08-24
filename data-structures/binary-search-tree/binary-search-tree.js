@@ -388,21 +388,24 @@ BinarySearchTree.prototype = {
      * @param {String} traversalMethod Identifier for the traversal method to use.
      * This parameter is optional - defaults to an inOrder traversal. Other options
      * include preOrder and postOrder.
+     * @param {Node} start the node at which to start the traversal. This parameter
+     * is optional - defaults to the root node.
      * @return {void}
      * @method traverse
      */
-    traverse: function(process, traversalMethod) {
+    traverse: function(process, traversalMethod, start) {
         traversalMethod = traversalMethod || 'inOrder';
+        start = start || this._root;
         // normalize input to avoid uppercase/lowercase mixups
         switch (traversalMethod.toLowerCase()) {
             case 'inorder':
-                inOrder(this._root, process);
+                inOrder(start, process);
                 break;
             case 'preorder':
-                preOrder(this._root, process);
+                preOrder(start, process);
                 break;
             case 'postorder':
-                postOrder(this._root, process);
+                postOrder(start, process);
                 break;
             default:
                 throw new Error('traversalMethod parameter should be either ommitted or one of inOrder, preOrder or postOrder');
@@ -440,5 +443,40 @@ BinarySearchTree.prototype = {
             current = current.right;
         }
         return current.value;
+    },
+
+    /**
+     * Searches the tree for a particular value
+     * @param {int} value the value to search for
+     * @method depthFirstSearch
+     * @return {Node} the node corresponding to the
+     * value parameter
+     */
+    depthFirstSearch: function(value) {
+        var node;
+        this.traverse(function(n) {
+            if (n.value === value) {
+                // how to break out of this traversal once the node has been found?
+                node = n;
+            }
+        }, 'preOrder');
+        return node;
+    },
+
+    /**
+     * Gets the number of children for a particular node.
+     * @param {Object} node the parent node
+     * @method numChildren
+     * @return {int} The number of child nodes who are related
+     * to the node paramater.
+     */
+    numChildren: function(node) {
+        // default to root
+        node = node || this._root, num = 0;
+        this.traverse(function(n) {
+            num++;
+        }, 'inOrder', node);
+        // subtract 1 because the node itself is always counted
+        return num - 1;
     }
 };

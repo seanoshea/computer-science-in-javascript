@@ -314,6 +314,48 @@ YAHOO.test.BinarySearchTree = (function(){
         }
     }));
 
+    //-------------------------------------------------------------------------
+    // Test Case for dfs/numChildren methods
+    //-------------------------------------------------------------------------
+    
+    suite.add(new YAHOO.tool.TestCase({
+    
+        name : "min/max testing",
+
+        setUp: function(){
+            this.tree = new BinarySearchTree();
+            this.tree.add(12);
+            this.tree.add(44);
+            this.tree.add(9);
+            this.tree.add(98);
+            this.tree.add(42);
+            this.tree.add(75);
+            this.tree.add(15);
+            this.tree.add(88);
+        },
+        
+        tearDown: function(){
+            delete this.tree;
+        },
+
+        //---------------------------------------------------------------------
+        // Tests
+        //---------------------------------------------------------------------
+
+        testDepthFirstSearch: function() {
+            var shouldBeFound = this.tree.depthFirstSearch(75),
+            isntThere = this.tree.depthFirstSearch(74);
+            assert.areEqual(75, shouldBeFound.value, "75 should be found in the tree");
+            assert.isTrue(typeof isntThere === 'undefined');
+        },
+        
+        testNumChildren: function() {
+            assert.areEqual(7, this.tree.numChildren(), "The root node should have 7 children");
+            assert.areEqual(2, this.tree.numChildren(this.tree.depthFirstSearch(98)), 'the node 98 should have 2 children');
+            assert.areEqual(5, this.tree.numChildren(this.tree.depthFirstSearch(44)), 'the node 98 should have 2 children');
+        }
+    }));
+
     //return it
     return suite;
 
