@@ -457,6 +457,7 @@ BinarySearchTree.prototype = {
         this.traverse(function(n) {
             if (n.value === value) {
                 // how to break out of this traversal once the node has been found?
+                // need some kind of conditional traversal.
                 node = n;
             }
         }, 'preOrder');
@@ -478,5 +479,29 @@ BinarySearchTree.prototype = {
         }, 'inOrder', node);
         // subtract 1 because the node itself is always counted
         return num - 1;
+    },
+
+    /**
+     * Returns the node closest to the given value parameter.
+     * @param {int} value the value to search for in the tree.
+     * @method closest
+     * @return {Node} node which has the value which is closest
+     * to the value parameter.
+     */
+    closest: function(value) {
+        var current;
+        this.traverse(function(node) {
+            if (!current) {
+                // accommodate for the fact that this might be the root node
+                current = node;
+            } else {
+                // otherwise, see if the current difference is greater than the
+                // difference between the node's value and the value parameter.
+                if (Math.abs(current.value - value) > Math.abs(node.value - value)) {
+                    current = node;
+                }
+            }
+        }, 'preOrder');
+        return current;
     }
 };

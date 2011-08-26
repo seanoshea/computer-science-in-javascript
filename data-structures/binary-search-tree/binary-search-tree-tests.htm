@@ -320,7 +320,7 @@ YAHOO.test.BinarySearchTree = (function(){
     
     suite.add(new YAHOO.tool.TestCase({
     
-        name : "min/max testing",
+        name : "min/max/dfs/closest testing",
 
         setUp: function(){
             this.tree = new BinarySearchTree();
@@ -353,6 +353,12 @@ YAHOO.test.BinarySearchTree = (function(){
             assert.areEqual(7, this.tree.numChildren(), "The root node should have 7 children");
             assert.areEqual(2, this.tree.numChildren(this.tree.depthFirstSearch(98)), 'the node 98 should have 2 children');
             assert.areEqual(5, this.tree.numChildren(this.tree.depthFirstSearch(44)), 'the node 98 should have 2 children');
+        },
+        
+        testClosest: function() {
+            assert.areEqual(88, this.tree.closest(89).value, "88 is closest to 89");
+            assert.areEqual(98, this.tree.closest(4000).value, "98 is closest to 4000");
+            assert.areEqual(9, this.tree.closest(1).value, "9 is closest to 1");
         }
     }));
 
