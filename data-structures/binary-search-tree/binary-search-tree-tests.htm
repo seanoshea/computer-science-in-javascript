@@ -320,7 +320,7 @@ YAHOO.test.BinarySearchTree = (function(){
     
     suite.add(new YAHOO.tool.TestCase({
     
-        name : "min/max/dfs/closest testing",
+        name : "min/max/dfs/closest/bfs testing",
 
         setUp: function(){
             this.tree = new BinarySearchTree();
@@ -359,7 +359,17 @@ YAHOO.test.BinarySearchTree = (function(){
             assert.areEqual(88, this.tree.closest(89).value, "88 is closest to 89");
             assert.areEqual(98, this.tree.closest(4000).value, "98 is closest to 4000");
             assert.areEqual(9, this.tree.closest(1).value, "9 is closest to 1");
-        }
+        },
+        
+        testBreadthFirstSearch: function() {
+            var arr = [];
+            this.tree.breadthFirstTraversal(function(node) {
+                arr.push(node.value);
+            });
+            assert.areEqual(12, arr[0], "12 should be the first number in the bfs");
+            assert.areEqual(9, arr[1], "9 should be the second number in the bfs");
+            assert.areEqual(88, arr[arr.length - 1], "88 should be the last number in the bfs");
+        },
     }));
 
     //return it

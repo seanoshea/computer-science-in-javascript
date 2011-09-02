@@ -396,6 +396,9 @@ BinarySearchTree.prototype = {
     traverse: function(process, traversalMethod, start) {
         traversalMethod = traversalMethod || 'inOrder';
         start = start || this._root;
+        if (!start) {
+            return;
+        }
         // normalize input to avoid uppercase/lowercase mixups
         switch (traversalMethod.toLowerCase()) {
             case 'inorder':
@@ -503,5 +506,38 @@ BinarySearchTree.prototype = {
             }
         }, 'preOrder');
         return current;
+    },
+
+    breadthFirstTraversal: function(process, start) {
+        var arr, queue = [], list = [], t = function() {
+            var node;
+            while (queue.length) {
+                node = queue.splice(0, 1)[0];
+                if (node.left) {
+                    queue.push(node.left);
+                }
+                if (node.right) {
+                    queue.push(node.right);
+                }
+                list.push(node);
+            }
+            return list;
+        }
+        start = start || this._root;
+        // ensure that we have a start node at least
+        if (!start) {
+            return;
+        }
+        list.push(start);
+        if (start.left) {
+            queue.push(start.left);
+        }
+        if (start.right) {
+            queue.push(start.right);
+        }
+        arr = t(list);
+        for (var i = 0, l = arr.length; i < l; i++) {
+            process.call(this, arr[i]);
+        }
     }
 };
